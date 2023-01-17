@@ -1,1 +1,3 @@
-console.log(moment().format("MMMM Do YYYY, h:mm:ss a"));
+var currentDay = $("#currentDay")
+
+currentDay.text(moment().format("dddd MMMM Do"))
