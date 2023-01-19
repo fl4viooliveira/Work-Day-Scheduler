@@ -17,24 +17,74 @@ function hourOfDay() {
   return hour;
 }
 
-var workHours = [9, 10, 11, 12, 1, 2, 3, 4, 5, 6, 7];
-
+// var workHours = [9, 10, 11, 12, 13, 14, 15, 16, 17];
+var workHours = [
+  [9, "am"],
+  [10, "am"],
+  [11, "am"],
+  [12, "pm"],
+  [13, "pm"],
+  [14, "pm"],
+  [15, "pm"],
+  [16, "pm"],
+  [17, "pm"],
+];
 console.log(hourOfDay());
 
+var timeRow;
+
+function amPm(index) {
+  if (workHours[index][0] <= 12) {
+    return workHours[index][0] + " " + workHours[index][1];
+  } if(workHours[index][0] > 12) {
+    return workHours[index][0] - 12 + " " + workHours[index][1];
+  }
+}
 
 function setTimeBlocks() {
   for (var i = 0; i < workHours.length; i++) {
-    var timeRow = $(`<div id="id-${i}" class="row">
-      <div class="col-2 hour"></div>
-        <textarea class="col-8 description "></textarea>
+    timeRow = $(`<div id="id-${i}" class="row">
+      </div>`);
+
+    if (workHours[i][0] < hourOfDay()) {
+      timeRow.append(
+        $(`<div class="col-2 hour"><h4> ${amPm(i)}</h4></div>`),
+        $('<textarea class="col-8 description past">'),
+        $(`
         <button class="col-2 saveBtn">
           <i class="fas fa-save"></i>
         </button>
-      </div>`);
-    timeBlocks.append(timeRow);
+          `)
+      );
+    }
+    if (workHours[i][0] === hourOfDay()) {
+      timeRow.append(
+        $(
+          `<div class="col-2 hour"><h4>${amPm(i)}</h4></div>`
+        ),
+        $('<textarea class="col-8 description present">'),
+        $(`
+        <button class="col-2 saveBtn">
+          <i class="fas fa-save"></i>
+        </button>
+          `)
+      );
+    }
+    if (workHours[i][0] > hourOfDay()) {
+      timeRow.append(
+        $(
+          `<div class="col-2 hour"><h4>${amPm(i)}</h4></div>`
+        ),
+        $('<textarea class="col-8 description future">'),
+        $(`
+        <button class="col-2 saveBtn">
+          <i class="fas fa-save"></i>
+        </button>
+          `)
+      );
+    }
 
-    // if(workHours[i] < hourOfDay){
-    // }
+    timeBlocks.append(timeRow);
   }
 }
 
