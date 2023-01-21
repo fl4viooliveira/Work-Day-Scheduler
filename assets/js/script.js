@@ -11,6 +11,8 @@ function displayTime() {
 function hourOfDay() {
   var hour = moment().hour();
   return hour;
+  // to test
+  // return 12;
 }
 
 function update() {
@@ -30,8 +32,6 @@ var workHours = [
   [17, "pm"],
 ];
 
-var timeRow;
-
 function amPm(index) {
   if (workHours[index][0] <= 12) {
     return workHours[index][0] + " " + workHours[index][1];
@@ -40,6 +40,8 @@ function amPm(index) {
     return workHours[index][0] - 12 + " " + workHours[index][1];
   }
 }
+
+var timeRow;
 
 function setTimeBlocks() {
   for (var i = 0; i < workHours.length; i++) {
@@ -79,7 +81,6 @@ function setTimeBlocks() {
           `)
       );
     }
-
     timeBlocks.append(timeRow);
   }
 }
@@ -87,9 +88,40 @@ function setTimeBlocks() {
 setTimeBlocks();
 hourOfDay();
 
-setInterval(function () {
-  displayTime();
-}, 1000);
+var dayTasks = {};
+
+function storeTasks() {
+  localStorage.setItem("tasks", JSON.stringify(dayTasks));
+}
+
+function persistEvents() {
+  var storage = JSON.parse(localStorage.getItem("tasks"));
+  console.log(storage);
+
+  for (var task in storage) {
+    dayTasks[task] = storage[task];
+    $(`#${task}`).children("textarea").text(`${storage[task]}`);
+  }
+}
+
+persistEvents();
+
+var saveBtn = $("button");
+
+saveBtn.click(function () {
+  var rowId = $(this).parent().attr("id");
+  var textareaValue = $(`#${rowId}`).children("textarea").val();
+
+  dayTasks[rowId] = textareaValue;
+
+  storeTasks();
+
+  console.log(rowId, textareaValue);
+});
+
+console.log(dayTasks);
+
+setInterval(displayTime, 1000);
 
 /*
  * To update the conditions around the hourOfDay function.
