@@ -10,8 +10,9 @@ function displayTime() {
 
 function hourOfDay() {
   var hour = moment().hour();
-  // return hour;
-  return 12;
+  return hour;
+  // to test
+  // return 12;
 }
 
 function update() {
@@ -87,20 +88,40 @@ function setTimeBlocks() {
 setTimeBlocks();
 hourOfDay();
 
-var saveBtn = $("button");
+var dayTasks = {};
 
-// test
-$("#id-3").children("textarea").text("test 1234");
+function storeTasks() {
+  localStorage.setItem("tasks", JSON.stringify(dayTasks));
+}
+
+function persistEvents() {
+  var storage = JSON.parse(localStorage.getItem("tasks"));
+  console.log(storage);
+
+  for (var task in storage) {
+    dayTasks[task] = storage[task];
+    $(`#${task}`).children("textarea").text(`${storage[task]}`);
+  }
+}
+
+persistEvents();
+
+var saveBtn = $("button");
 
 saveBtn.click(function () {
   var rowId = $(this).parent().attr("id");
+  var textareaValue = $(`#${rowId}`).children("textarea").val();
 
-  console.log($(`#${rowId}`).children("textarea").val());
+  dayTasks[rowId] = textareaValue;
 
-  console.log(rowId);
+  storeTasks();
+
+  console.log(rowId, textareaValue);
 });
 
-// setInterval(displayTime, 1000);
+console.log(dayTasks);
+
+setInterval(displayTime, 1000);
 
 /*
  * To update the conditions around the hourOfDay function.
@@ -108,6 +129,6 @@ saveBtn.click(function () {
  * We can have a current minute. If we subtract from hour,
  * we can find remaining minutes to new hour.
  */
-// setTimeout(function () {
-//   location.reload();
-// }, 1000 * (60 - moment().minutes()));
+setTimeout(function () {
+  location.reload();
+}, 1000 * (60 - moment().minutes()));
