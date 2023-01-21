@@ -10,7 +10,8 @@ function displayTime() {
 
 function hourOfDay() {
   var hour = moment().hour();
-  return hour;
+  // return hour;
+  return 12;
 }
 
 function update() {
@@ -30,8 +31,6 @@ var workHours = [
   [17, "pm"],
 ];
 
-var timeRow;
-
 function amPm(index) {
   if (workHours[index][0] <= 12) {
     return workHours[index][0] + " " + workHours[index][1];
@@ -40,6 +39,8 @@ function amPm(index) {
     return workHours[index][0] - 12 + " " + workHours[index][1];
   }
 }
+
+var timeRow;
 
 function setTimeBlocks() {
   for (var i = 0; i < workHours.length; i++) {
@@ -79,7 +80,6 @@ function setTimeBlocks() {
           `)
       );
     }
-
     timeBlocks.append(timeRow);
   }
 }
@@ -87,9 +87,20 @@ function setTimeBlocks() {
 setTimeBlocks();
 hourOfDay();
 
-setInterval(function () {
-  displayTime();
-}, 1000);
+var saveBtn = $("button");
+
+// test
+$("#id-3").children("textarea").text("test 1234");
+
+saveBtn.click(function () {
+  var rowId = $(this).parent().attr("id");
+
+  console.log($(`#${rowId}`).children("textarea").val());
+
+  console.log(rowId);
+});
+
+// setInterval(displayTime, 1000);
 
 /*
  * To update the conditions around the hourOfDay function.
@@ -97,6 +108,6 @@ setInterval(function () {
  * We can have a current minute. If we subtract from hour,
  * we can find remaining minutes to new hour.
  */
-setTimeout(function () {
-  location.reload();
-}, 1000 * (60 - moment().minutes()));
+// setTimeout(function () {
+//   location.reload();
+// }, 1000 * (60 - moment().minutes()));
