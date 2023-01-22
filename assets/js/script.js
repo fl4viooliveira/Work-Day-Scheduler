@@ -3,6 +3,7 @@ var currentDay = $("#currentDay");
 var timeBlocks = $(".container");
 
 // Moment.js
+// Function to update date and time
 function displayTime() {
   var now = moment().format("DD MMM YYYY [at] hh:mm:ss a");
   currentDay.text(now);
@@ -15,11 +16,7 @@ function hourOfDay() {
   // return 12;
 }
 
-function update() {
-  displayTime();
-  hourOfDay();
-}
-
+// Array with working hours, easy way to add or remove hours
 var workHours = [
   [9, "am"],
   [10, "am"],
@@ -32,6 +29,7 @@ var workHours = [
   [17, "pm"],
 ];
 
+// Function to convert in 12 hours 
 function amPm(index) {
   if (workHours[index][0] <= 12) {
     return workHours[index][0] + " " + workHours[index][1];
@@ -43,6 +41,7 @@ function amPm(index) {
 
 var timeRow;
 
+// Function to create a row in looping, appending each element based on conditions
 function setTimeBlocks() {
   for (var i = 0; i < workHours.length; i++) {
     timeRow = $(`<div id="id-${i}" class="row">
@@ -90,14 +89,16 @@ hourOfDay();
 
 var dayTasks = {};
 
+// Function to create a tasks object on localStorage and add dayTasks object
 function storeTasks() {
   localStorage.setItem("tasks", JSON.stringify(dayTasks));
 }
 
+// Get JSON from localStorage and convert to object 
 function persistEvents() {
   var storage = JSON.parse(localStorage.getItem("tasks"));
-  console.log(storage);
 
+// Run a loop to update the local object and populate the textarea
   for (var task in storage) {
     dayTasks[task] = storage[task];
     $(`#${task}`).children("textarea").text(`${storage[task]}`);
@@ -108,18 +109,20 @@ persistEvents();
 
 var saveBtn = $("button");
 
+/*
+* On click function will be created the variable rowId to get the parent id form the clicked button
+* also will be created the variable to textarea value on the same row of the clicked button, to get the text
+* Update the dayTasks object with the rowId as a key and textareaValue as a value. 
+*/
 saveBtn.click(function () {
   var rowId = $(this).parent().attr("id");
   var textareaValue = $(`#${rowId}`).children("textarea").val();
 
+  // We use square brackets to be able to add variables keys
   dayTasks[rowId] = textareaValue;
 
   storeTasks();
-
-  console.log(rowId, textareaValue);
 });
-
-console.log(dayTasks);
 
 setInterval(displayTime, 1000);
 
