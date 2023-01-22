@@ -114,7 +114,7 @@ _To get a local copy up and running, follow these simple example steps._
 
 _To install, on the terminal type:_
    ```sh
-   git clone git@github.com:fl4viooliveira/Code-Quiz.git
+   git clone git@github.com:fl4viooliveira/Work-Day-Scheduler.git
    ```
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
